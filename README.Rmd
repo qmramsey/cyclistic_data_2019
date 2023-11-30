@@ -1,20 +1,20 @@
 ---
-title: "Cyclistic 2019 Case-Study"
+title: "Cyclistic 2019 Case Study"
 author: "Quintin Ramsey"
 date: "11/28/2023"
 # output: html_document
 ---
 
 # Cyclistic Data 2019
-A case-study on the bike-share data from the 'fictional' company Cyclistic
+A case study on the bike-share data from the 'fictional' company Cyclistic. Data can be found [here](https://divvy-tripdata.s3.amazonaws.com/index.html)
 
 
 ## The Case-Study
-The data I have here is internal data from the Lyft's own database and has been made available by Motivate International Inc. See their [aggreement](https://divvybikes.com/data-license-agreement). The data is from Chicago in the year 2019. The data is split into quarterly segments, which have been combined later into one full-year dataset.
+The data I have here is internal data from Lyft's database and has been made available by Motivate International Inc. See their [aggreement](https://divvybikes.com/data-license-agreement). The data is from Chicago in the year 2019. The data is split into quarterly segments, which have been combined later into one full-year dataset.
 
 _"How do annual members and casual riders use Cyclistic bikes differently?"_
 
-Right from the start, this is a very open ended question. I will need to use a programming language to be able to parse through all of that data very quickly.
+Right from the start, this is a very open-ended question. I will need to use a programming language to be able to parse through all of that data very quickly.
 
 ## Looking at the Data
 I should try to use R because of the sheer size of the datasets. However, R is not being very *cooperative* at the moment ...
@@ -28,7 +28,7 @@ library(tidyverse)
 ```
 
 
-Okay Yayy! Kniting works! Now I can get cracking. I want an overview of the data that I will be looking at. The sheets might be different in some way, so it will be important to look at them seperately.
+Okay, Yayy! Knitting works! Now I can get cracking. I want an overview of the data that I will be looking at. The sheets might be different in some way, so it will be important to look at them separately.
 
 
 ```{R Looking at the Data}
@@ -36,7 +36,7 @@ Okay Yayy! Kniting works! Now I can get cracking. I want an overview of the data
 quarter_1 <- read_csv("Data\\Divvy_Trips_2019_Q1.csv")
 ```
 
-As you can see, the spreadsheet is frikin HUGE!!! 365,069 different entries. However, R has been kind enough to identify date-times, and other datatypes automatically. Let's just check the other sheets to see if they can be merged together to create the whole year dataset.
+As you can see, the spreadsheet is frikin HUGE!!! 365,069 different entries. However, R has been kind enough to identify date-times, and other datatypes automatically. Let's just check the other sheets to see if they can be merged to create the whole-year dataset.
 
 ```{R Looking at the Rest of the Data}
 # Read in the other quarters
@@ -54,7 +54,7 @@ First off, those pesky column titles. The datatypes are all the same, but the co
 # Rename columns in Q2 to be the same as in Q1
 colnames(quarter_2) <- colnames(quarter_1)
 ```
-Now, I want to be able to see the whole year together as one single dataframe (of around 3 million or so entries). For that, I need to merge the frames. Because I want to preserve all of the data during the entire year, I cannot merge the data, I have to "union" the data. I can also only union two at a time, sooooo...
+Now, I want to be able to see the whole year together as one single data frame (of around 3 million or so entries). For that, I need to merge the frames. Because I want to preserve all of the data during the entire year, I cannot merge the data, I have to "union" the data. I can also only union two at a time, sooooo...
 
 ```{R Union}
 # Join together all 4 quarter sheets into one full-year sheet
@@ -63,12 +63,12 @@ second_half <- union_all(quarter_3, quarter_4)
 full_2019 <- union_all(first_half, second_half)
 glimpse(full_2019)
 ```
-Perfect! 12 columns, and every single row is accounted for. Let's see what we can find about our dataset.
+Perfect! 12 columns and every single row is accounted for. Let's see what we can find about our dataset.
 
-## Who are These People?
+## Who Are These People?
 
 ### Gender
-I want to get a quick plot of the gender of the rider for each ride in the dataset. Keep in mind, this may be rides by the same person, but we are looking at the data from the perspective of the rides, not the riders.
+I want to get a quick plot of the gender of the rider for each ride in the dataset. Keep in mind, that these may be rides by the same person, but we are looking at the data from the perspective of the rides, not the riders.
 ```{R View Gender Counts}
 # View counts of each gender and usertype combination
 gender_grouped <- full_2019 %>%
@@ -95,7 +95,7 @@ ggplot(data = full_2019) +
 ```
 
 We can also see what the split looks like the other way
-```{R Subsriber Bar}
+```{R Subscriber Bar}
 # Plot a barplot split by user type
 ggplot(data = full_2019) +
     geom_bar(mapping = aes(x = usertype, fill = gender)) +
@@ -113,7 +113,7 @@ ggplot(data = full_2019) +
 ```
 
 
-With the data we see here, a "Customer" is someone who is just purchasing a daily or weekly pass. A "Subscriber" is someone who has purchased the annual pass (or individual rides). From this, we can infer that people who purchase the membership are likely to report their gender. Additionally, we can clearly see that there are more men using the service than women. Most of the customers that use the serice, however, are members and purchase the annual membership. Likely, they inted to use the service year-round.
+With the data we see here, a "Customer" is someone who is just purchasing a daily or weekly pass. A "Subscriber" is someone who has purchased the annual pass (or individual rides). From this, we can infer that people who purchase the membership are likely to report their gender. Additionally, we can see that more men are using the service than women. Most of the customers that use the service, however, are members and purchase the annual membership. Likely, they intend to use the service year-round.
 
 ### Age
 Setting some restrictions on the age of the riders might be important. Of all of the entries, 538,751 of them did not give an age. Furthermore, of those that did, some are set as young as 5 years old, while the oldest is a whopping 260 years old.
@@ -133,7 +133,7 @@ filtered_age <- full_2019 %>%
     filter(age_appx < 100 & age_appx > 0 & age_appx != "NA")
 ```
 
-Leaving 539,534 removed from the dataset (833 additional people older than 100), ages unlikely to be realistic for a bike-share program. Well ... Histogram, please ...
+Leaving 539,534 removed from the dataset (833 additional people older than 100), ages are unlikely to be realistic for a bike-share program. Well ... Histogram, please ...
 
 ```{R Age Histogram}
 # Plot a histogram of all rider ages
@@ -181,12 +181,12 @@ ggplot(data = filtered_age) +
         subtitle = "Split by Gender")
 ```
 
-***The data also demonstrate that the people who did not give reliable ages were also the people who tended not to include thier gender***
+***The data also demonstrate that the people who did not give reliable ages were also the people who tended not to include their gender***
 
 ## Trends
 
 ### Annual
-Because most of the rides were taken by annual subsribers, it might be helpful to see when the service is being most used, and by which group.
+Because most of the rides were taken by annual subscribers, it might be helpful to see when the service is being most used, and by which group.
 ```{R Date Group}
 # I need a new column so that I can group by date
 full_2019$start_date <- as.Date(full_2019$start_time)
@@ -223,7 +223,7 @@ longer <- to_pivot %>% pivot_longer(cols = c("totals", "cust", "subs"),
                                     names_to = "usertype",
                                     values_to = "daily_rides")
 
-# Plot a line plot showing all both types and total
+# Plot a line plot showing both types and the total
 ggplot(data = longer, aes(x = date, y = daily_rides)) +
     geom_line(aes(color = usertype)) +
     scale_color_manual(
@@ -244,7 +244,7 @@ ggplot(data = longer, aes(x = date, y = daily_rides)) +
     ggtitle("Number of Total Rides per Day")
 ```
 
-Here we can see that the ridership increases a lot in the summer months. The warmer weather and road conditions may be more conducive to biking. However, there seems to be large fluctuations throughout the dataset. This may be weekday and weekend usage. Let's also look at a smoother version, just to make it easier on our poor eyes.
+Here we can see that the ridership increases a lot in the summer months. The warmer weather and road conditions may be more conducive to biking. However, there seem to be large fluctuations throughout the dataset. This may be weekday and weekend usage. Let's also look at a smoother version, just to make it easier on our poor eyes.
 
 ```{R Smoothed}
 # Plot the smoothed lineplot
@@ -268,9 +268,9 @@ ggplot(data = longer, aes(x = date, y = daily_rides)) +
     ggtitle("Number of Total Rides per Day (Smoothed)")
 ```
 
-**We can see that ridership peaks around the month of August**
+**We can see that ridership peaks around August**
 
-If there were no other influencing factors on the data, the graph should end the year around the same place it started. However, COVID-19 was happening and things like bike-sharing and going out without protection became more difficult (likely leading to the sharper drop at the end of the year).
+If there were no other influencing factors on the data, the graph should end the year around the same place it started. However, COVID-19 was happening and things like bike-sharing and going out without protection became more difficult (likely leading to a sharper drop at the end of the year).
 
 ### Weekly
 First, the data needs to be rewritten so that each date is turned into a corresponding day of the week. Thankfully, R makes quick work of that...
@@ -296,7 +296,7 @@ ggplot(data = full_2019) +
     ggtitle("Number of Rides Each Day of the Week")
 ```
 
-Manually showing the weekend values as a darker shade highlights that the ridership on the weekends is lower than the weekdays. It is possible some people are using the service to commute but there are still many rides happening on the weekends.
+Manually showing the weekend values as a darker shade highlights that the ridership on the weekends is lower than on the weekdays. Some people may be using the service to commute but there are still many rides happening on the weekends.
 
 ### Foolin Around
 The average number of rides taken daily is:
@@ -342,7 +342,7 @@ ggplot(data = date_grouped) +
     scale_x_continuous(labels = scales::comma)
 ```
 
-Clearly, the data is bimodal. Perhaps a breakdown by day of the week?
+The data is bimodal. Perhaps a breakdown by the day of the week?
 
 ```{R Histogram Facet}
 # Order the days of the week in the date_grouped dataset
@@ -387,7 +387,7 @@ ggplot(data = date_grouped) +
     scale_x_continuous(labels = scales::comma)
 ```
 
-Ahhhhhh, yes. Here we can see the back and forth sway of the number of daily rides. As the seasons become warmer, the nummber of rides tends to increase. As the temperature drops, daily bike rides become less frequent. This, at least, makes sense.
+Ahhhhhh, yes. Here we can see the back-and-forth sway of the number of daily rides. As the seasons become warmer, the number of rides tends to increase. As the temperature drops, daily bike rides become less frequent. This, at least, makes sense.
 
 Using this information, the sensible thing to do is to show basic summaries for the seasons, to predict ridership for each season. This could also be broken apart monthly.
 ```{R By month}
@@ -421,7 +421,7 @@ season_average
 
 
 ## Daily Behavior
-It is important for us to see the daily usage of the bikes. That way, we can make inferences about what the major purpose of the bikes are for the users.
+We need to see the daily usage of the bikes. That way, we can make inferences about what the major purpose of the bikes is for the users.
 
 ```{R Daily Histogram}
 #Create a new column changing the time into a number of seconds that can be put in histogram bins
@@ -446,9 +446,9 @@ ggplot(data = full_2019) +
     ggtitle("The Number of Recorded Rides Every Half Hour", subtitle = "Total Across the Year")
 ```
 
-The function "as.numeric(hm(substr(full_2019$start_time, 12, 16)))" takes the substring of the date time "hh:mm" and converts it into a numerical count of the seconds. Then the bins are constructed so that the first bin starts at 0000 seconds (00:00) and ends at 1800 seconds (00:30), ensuring that each bin spans 30 minutes in total.
+The function "as.numeric(hm(substr(full_2019$start_time, 12, 16)))" takes the substring of the date-time "hh:mm" and converts it into a numerical count of the seconds. Then the bins are constructed so that the first bin starts at 0000 seconds (00:00) and ends at 1800 seconds (00:30), ensuring that each bin spans 30 minutes in total.
 
-Here, we can see that the bikes were most commonly used at paek times throughout the day that correspond to commuting to and from work. However, that pattern is changed when the data is divided between the user type.
+Here, we can see that the bikes were most commonly used at peak times throughout the day corresponding to commuting to and from work. However, that pattern is changed when the data is divided between the user types.
 
 ```{R Divided Histogram}
 # Plot histograms of ride times split by user type
@@ -541,7 +541,7 @@ summary(filtered_trip$tripduration[filtered_trip$usertype == "Customer"])
 summary(filtered_trip$tripduration[filtered_trip$usertype == "Subscriber"])
 ```
 
-Here, we can see that the median ride length for the subscriber is 587 seconds (just under 10 minutes), the median trip for a customer is 1492 seconds (almost 25 minutes).
+Here, we can see that the median ride length for the subscriber is 587 seconds (just under 10 minutes), and the median trip for a customer is 1492 seconds (almost 25 minutes).
 
 ## Findings
 
@@ -550,35 +550,35 @@ Overall, the data show a convincing narrative. There are two types of users
 1. Customer
 2. Subscriber
 
-Subscribers are people who have purchased an annual pass. While thier rides tend not to last as long as a "Customer" (casual) ride, they make up nearly 75% of the total number of rides.
-Also, while casual riders tend to use the service during the day with no discernable patterns, membership users tend to use the sevice to commute (and throughout the day).
+Subscribers are people who have purchased an annual pass. While their rides tend not to last as long as a "Customer" (casual) ride, they make up nearly 75% of the total number of rides.
+Also, while casual riders tend to use the service during the day with no discernable patterns, membership users tend to use the service to commute (and throughout the day).
 The casual riders and the Subscribers tend to be about the same age, but there are significantly more men using the service than women.
-The rides tend to take place during the summer months. The outside temperature and road conditions likely factors in to people's decisions to use a bike-share.
+The rides tend to take place during the summer months. The outside temperature and road conditions likely factor into people's decisions to use a bike-share.
 
 
 ## Recommendations
 There are three main recommendations from the data:
 
 1. Encourage more women to be able to use the service.
-2. Encourage people to use the service as a means for commuting (especially over short distances).
-3. Make the most out of the summer months and provide incentives for encouraging rides during the off season, provided the conditions are safe.
+2. Encourage people to use the service as a means of commuting (especially over short distances).
+3. Make the most out of the summer months and provide incentives for encouraging rides during the off-season, provided the conditions are safe.
 
 > Encourage more women to be able to use the service.
 
 Perhaps looking into making the bikes more comfortable to sit on as well as programs to help women. Perhaps advertising directly focused on appealing to women with an emphasis on using the bike for commuting, especially in the city.
 
-> Encourage people to use the service as a means for commuting.
+> Encourage people to use the service as a means of commuting.
 
 Members use this service to commute a lot more than their casual counterparts. If there is a desire to get more members to use the service, focus should be placed on how the service is great for commuting.
 Centralized hubs for bikes should be commonplace throughout the city. Perhaps even letting members have exclusive access to a company bike.
-This sevice is also something that should be addressed at the government level, pushing for legislation that allows more/better bike infrastructure, routes, and incentives.
-This can also be done at the business level, providing companies in the city a program to allow employees on their payroll to be able to use the service at a reduced/no cost.
-Making sure that the bikes also have storage space for some groceries may also help people who live nearby to be able to also use the service to run errands.
+This service is also something that should be addressed at the government level, pushing for legislation that allows more/better bike infrastructure, routes, and incentives.
+This can also be done at the business level, providing companies in the city with a program to allow employees on their payroll to be able to use the service at a reduced/no cost.
+Making sure that the bikes also have storage space for some groceries may also help people who live nearby to be able to use the service to run errands.
 
 > Make the most out of the summer months.
 
-The bussiest individual days are found in the summer. However, there are still people using the service in the winter. While controlling the teamperature outside is difficult, adding comfort options to imporve ride quality could be looked into.
-For example, making the handlebar marerial something that does not conduct heat well to help keep hands warmer in the winter (or even using the energy from the wheels to warm the handlebars).
+The busiest individual days are found in the summer. However, there are still people using the service in the winter. While controlling the temperature outside is difficult, adding comfort options to improve ride quality could be looked into.
+For example, making the handlebar material something that does not conduct heat well to help keep hands warmer in the winter (or even using the energy from the wheels to warm the handlebars).
 Providing extra incentives for people to purchase the annual passes in the summer. They might not use it all year, but they are more likely to once it gets warmer.
 
 Thanks for sticking this one through! Let me know what improvements can be made.
